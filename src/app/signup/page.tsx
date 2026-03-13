@@ -14,8 +14,8 @@ export default function SignupPage() {
         username: "",
     });
 
-    const [buttonDisabled, setButtonDisabled] = React.useState(false);
-    const [Loading, setLoading] = React.useState(false);
+    const [buttonDisabled, setButtonDisabled] = React.useState(true);
+    const [loading, setLoading] = React.useState(false);
 
     useEffect(() => {
         if (
@@ -27,25 +27,29 @@ export default function SignupPage() {
         } else {
             setButtonDisabled(true);
         }
-    }, [user])
+    }, [user]);
+
     const onSignup = async () => {
         try {
             setLoading(true);
-            const response = await axios.post("api/users/signup",user)
+
+            const response = await axios.post("/api/users/signup", user);
+
             console.log("Signup success", response.data);
-            router.push("/login")
+
+            router.push("/profile");
+
         } catch (error) {
-            console.log("signup failed", error.message)
-            // toast.error(error.message)
-        }finally{
-            setLoading(false)
+            console.log("Signup failed", error);
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen py-2">
 
-            <h1>{Loading ? "Processing" : "Signup"}</h1>
+            <h1>{loading ? "Processing..." : "Signup"}</h1>
             <hr />
 
             <label htmlFor="username">Username</label>
